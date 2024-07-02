@@ -1,0 +1,37 @@
+# networks:
+#   network_prm:
+#     driver: bridge
+
+# volumes:
+#     prm_postgres_data: {}
+
+services:
+  backend:
+    build:
+      context: backend
+      args:
+        DEV: true
+      target: runtime
+    container_name: prm-backend
+    ports:
+      - 8000:8000
+    tty: true
+    # depends_on:
+    #   - postgres
+    volumes:
+      - ./backend/app/:/app/app
+      - ./backend/tests/:/app/tests
+    entrypoint: ["fastapi", "dev", "app/main.py", "--host", "0.0.0.0", "--port", "8000"]
+    
+  # postgres:
+  #   image: postgres:16.3-bullseye
+  #   container_name: prm-postgres
+  #   restart: always
+  #   networks:
+  #       - network_prm
+  #   volumes:
+  #       - prm_postgres_data:/var/lib/postgresql/data
+  #   env_file: .env
+  #   environment:
+  #     TZ: 'Asia/Bangkok'
+  #     PGTZ: 'Asia/Bangkok'

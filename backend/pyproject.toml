@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "property_rental_manager"
+version = "0.1.0"
+description = ""
+authors = ["thunchakorn <s.thunchakorn@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.111.0"
+pydantic = "^2.8.0"
+sqlalchemy = "^2.0.31"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+flake8 = "^7.1.0"
+isort = "^5.13.2"
+mypy = "^1.10.1"
+pylint = "^3.2.5"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
