@@ -1,9 +1,6 @@
-from typing import Annotated
-
-from fastapi import Depends
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
-import settings
+from app.config import settings
 
 LocalSession = async_sessionmaker(
     autocommit=False,
@@ -21,6 +18,3 @@ async def get_db_session():
         raise
     finally:
         await session.close()
-
-
-DBSessionDep = Annotated[AsyncSession, Depends(get_db_session)]

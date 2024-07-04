@@ -1,25 +1,21 @@
 from fastapi import FastAPI
-from sqlalchemy import select
+from fastapi.middleware.cors import CORSMiddleware
 
-from models import User
-from db import DBSessionDep
+from app.dependencies import DBSessionDep
 
-app = FastAPI()
-
-
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+from app.routers import router
+from app.config import settings
 
 
-@app.get("/status")
-async def get_status(db_session: DBSessionDep):
-    return {"status": bool(db_session)}
+app = FastAPI(title=settings.APP_NAME)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
-@app.get("/users")
-async def get_users(db_session: DBSessionDep):
-    stmt = select(User)
-    results = await db_session.scalars(stmt)
-    users = results.all()
-    return {"users": users}
+app.include_router(router, prefix=settings.API_V1_PREFIX)

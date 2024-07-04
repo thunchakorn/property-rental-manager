@@ -1,7 +1,7 @@
 from typing import Optional
 
 from datetime import datetime
-from sqlalchemy import String, DateTime, func
+from sqlalchemy import DateTime, String, func
 from sqlalchemy import MetaData
 
 from sqlalchemy.orm import Mapped, mapped_column, DeclarativeBase
@@ -31,11 +31,3 @@ class BaseMixin:
         server_default=func.now(),
         onupdate=func.now(),
     )
-
-
-class User(Base, BaseMixin):
-    __tablename__ = "user"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True)
-    password: Mapped[str] = mapped_column(String(120))

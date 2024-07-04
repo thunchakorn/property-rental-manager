@@ -1,4 +1,3 @@
-import sys
 import pytz
 from pydantic import field_validator, PostgresDsn, ValidationInfo
 
@@ -6,9 +5,12 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    APP_NAME: str = "Property Rental Manager"
     DEV: bool = False
 
-    JWT_SECRET_KEY: str = "1"
+    API_V1_PREFIX: str = "/api/v1"
+
+    JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_EXPIRE_IN_MINUTES: int = 180
     JWT_REFRESH_EXPIRE_IN_MINUTES: int = 270
@@ -38,4 +40,4 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
 
-sys.modules[__name__] = Settings()
+settings = Settings()
