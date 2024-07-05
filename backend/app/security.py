@@ -15,13 +15,13 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def create_access_token(payload: dict) -> str:
+def create_token(payload: dict, timedelta_minutes: int) -> str:
     payload = payload.copy()
     payload.update(
         {
             "exp": (
-                datetime.now()
-                + timedelta(minutes=settings.JWT_ACCESS_EXPIRE_IN_MINUTES)
+                datetime.now(tz=settings.TIME_ZONE)
+                + timedelta(minutes=timedelta_minutes)
             )
         }
     )
@@ -31,6 +31,18 @@ def create_access_token(payload: dict) -> str:
     )
 
     return token
+
+
+def create_access_token(payload: dict) -> str:
+    return create_token(
+        payload=payload, timedelta_minutes=settings.JWT_ACCESS_EXPIRE_IN_MINUTES
+    )
+
+
+def create_refresh_token(payload: dict) -> str:
+    return create_token(
+        payload=payload, timedelta_minutes=settings.JWT_REFRESH_EXPIRE_IN_MINUTES
+    )
 
 
 def read_access_token(token: str):

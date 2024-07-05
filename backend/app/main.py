@@ -1,13 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.dependencies import DBSessionDep
-
 from app.routers import router
 from app.config import settings
 
 
-app = FastAPI(title=settings.APP_NAME)
+app = FastAPI(title=settings.APP_NAME, version="0.0.1")
 
 app.add_middleware(
     CORSMiddleware,

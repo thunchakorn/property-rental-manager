@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jwt.exceptions import InvalidTokenError
+from jwt.exceptions import DecodeError, ExpiredSignatureError
 
 from .services import get_user_by_id
 from .models import User
@@ -30,9 +30,15 @@ async def get_current_user(
         payload = read_access_token(token)
         user_id: int = payload.get("sub")
         if not user_id:
-            raise InvalidTokenError
-    except InvalidTokenError:
+            raise credentials_exception
+    except DecodeError:
         raise credentials_exception
+    except ExpiredSignatureError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token is expired.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     user = await get_user_by_id(user_id=user_id, db_session=db_session)
     if not user:
         raise credentials_exception

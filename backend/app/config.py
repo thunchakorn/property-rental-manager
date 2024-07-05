@@ -12,8 +12,8 @@ class Settings(BaseSettings):
 
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str = "HS256"
-    JWT_ACCESS_EXPIRE_IN_MINUTES: int = 180
-    JWT_REFRESH_EXPIRE_IN_MINUTES: int = 270
+    JWT_ACCESS_EXPIRE_IN_MINUTES: int = 60 * 6
+    JWT_REFRESH_EXPIRE_IN_MINUTES: int = 60 * 24
 
     POSTGRES_HOST: str
     POSTGRES_PORT: int = 5432
