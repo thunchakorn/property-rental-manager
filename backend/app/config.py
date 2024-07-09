@@ -1,5 +1,5 @@
 import pytz
-from pydantic import field_validator, PostgresDsn, ValidationInfo
+from pydantic import field_validator, PostgresDsn, ValidationInfo, EmailStr
 
 from pydantic_settings import BaseSettings
 
@@ -21,9 +21,12 @@ class Settings(BaseSettings):
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
+    ROOT_EMAIL: EmailStr
+    ROOT_PASSWORD: str
+
     TIME_ZONE: pytz.BaseTzInfo = pytz.timezone("Asia/Bangkok")
 
-    @field_validator("JWT_SECRET_KEY", "POSTGRES_PASSWORD")
+    @field_validator("JWT_SECRET_KEY", "POSTGRES_PASSWORD", "ROOT_PASSWORD")
     @classmethod
     def check_default_secret(cls, value: str, info: ValidationInfo):
         if info.data.get("DEV"):

@@ -11,4 +11,8 @@ router.include_router(user_router, prefix="/user", tags=["user"])
 
 @router.get("/status")
 async def get_status(db_session: DBSessionDep):
-    return {"status": bool(db_session)}
+    try:
+        await db_session.connection()
+        return {"db_connection": True}
+    except:
+        return {"db_connection": False}
